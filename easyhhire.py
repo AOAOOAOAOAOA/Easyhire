@@ -16,15 +16,15 @@ anket_list = []
 
 
 
-fnlog = "Лог_входа_FASTHR.xlsx"
+fnlog = "Enter.xlsx"
 wblog =load_workbook(fnlog)
 wslog = wblog["data"]
 
-fnvak = "Список_Вакансий_FASTHR.xlsx"
+fnvak = "Vaks.xlsx"
 wbvak = load_workbook(fnvak)
 wsvak = wbvak["data"]
 
-fn = "База_данных_анкет_FASTHR.xlsx"
+fn = "Anket.xlsx"
 wb =load_workbook(fn)
 ws = wb["data"]
 
