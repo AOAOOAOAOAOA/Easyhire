@@ -468,7 +468,7 @@ def DataReadVak():
 def Find_Language(message):
     
     if (message.from_user.username == Admin):
-        return "RU"
+        return 'RU'
     else:
         indexx = wslog["F1"].value
         for i in range(indexx):
@@ -479,7 +479,7 @@ def Find_Language(message):
 def Change_Language(message):
     
     if (message.from_user.username == Admin):
-        return "RU"
+        return 'RU'
     else:
         indexx = wslog["F1"].value
         for i in range(indexx):
@@ -487,7 +487,7 @@ def Change_Language(message):
                 lang = ""
                 if (message.from_user.username != Admin):
                     if (message.text == "🇬🇧 English"): lang = "EN-GB"
-                    if (message.text == "🇷🇺 руcкий"): lang = "RU"
+                    if (message.text == "🇷🇺 руcкий"): lang = 'RU'
                     if (message.text == "🇺🇦 Український"): lang = "UK"
                     if (message.text == "🇩🇪 Deutsch"): lang = "DE"
                     if (message.text == "🇬🇷 Ελληνική"): lang = "EL"
@@ -656,7 +656,7 @@ def find_random_anket(message, prof, cityy):
                         
                 if (was == False):#если не было
                     if(str(ws[f"H{index}"].value) == "True"): #если активированно
-                        if(str(trans.translate_text(text=message.text, target_lang="RU")).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()): #если город подходит
+                        if(str(trans.translate_text(text=message.text, target_lang='RU')).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()): #если город подходит
                             gorone = f"{trans.translate_text(text=ws[f'C{index}'].value, target_lang='RU')}".upper()
                             gortwo = f"{trans.translate_text(text=prof, target_lang='RU')}".upper()
                             if (gorone == gortwo): #если професия подходит
@@ -689,11 +689,11 @@ def find_random_anket(message, prof, cityy):
 
                         else: 
                             BlackList.append(index)
-                            print(type(str(trans.translate_text(text=message.text, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=message.text, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=message.text, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=message.text, target_lang='RU')).upper())
                             print("=")
-                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper())
                     else: 
                         BlackList.append(index)
                         print("актив")
@@ -772,7 +772,7 @@ def starte (message):
     lang = ""
     if (message.from_user.username != Admin):
         if (message.text == "🇬🇧 English"): lang = "EN-GB"
-        if (message.text == "🇷🇺 руcкий"): lang = "RU"
+        if (message.text == "🇷🇺 руcкий"): lang = 'RU'
         if (message.text == "🇩🇪 Deutsch"): lang = "DE"
         if (message.text == "🇺🇦 Український"): lang = "UK"
         if (message.text == "🇬🇷 Ελληνική"): lang = "EL"
@@ -979,11 +979,11 @@ def everything(message):
                         
                 if (was == False):#если не было
                     if(str(ws[f"H{index}"].value) == "True"): #если активированно
-                        if(str(trans.translate_text(text=message.text, target_lang="RU")).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()): #если город подходит
+                        if(str(trans.translate_text(text=message.text, target_lang='RU')).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()): #если город подходит
                             gorone = f"{trans.translate_text(text=ws[f'C{index}'].value, target_lang='RU')}"
                             print(type(gorone))
                             gorone = gorone.upper()
-                            gortwo = f"{trans.translate_text(text=prof, target_lang="RU")}".upper()
+                            gortwo = f"{trans.translate_text(text=prof, target_lang='RU')}".upper()
                             print(type(gortwo))
                             gortwo = gortwo.upper()
                             print("------")
@@ -1018,11 +1018,11 @@ def everything(message):
 
                         else: 
                             BlackList.append(index)
-                            print(type(str(trans.translate_text(text=message.text, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=message.text, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=message.text, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=message.text, target_lang='RU')).upper())
                             print("=")
-                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper())
                     else: 
                         BlackList.append(index)
                         print("актив")
@@ -1164,10 +1164,10 @@ def everything(message):
                         print(ccity)
                         print()
                         print(ws[f"D{index}"].value)
-                        if(str(trans.translate_text(text=ccity, target_lang="RU")).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()): #если город подходит
+                        if(str(trans.translate_text(text=ccity, target_lang='RU')).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()): #если город подходит
                             print("тринин")
                             gorone = f"{trans.translate_text(text=ws[f'C{index}'].value, target_lang='RU')}".upper()
-                            gortwo = f"{trans.translate_text(text=pprof, target_lang="RU")}".upper()
+                            gortwo = f"{trans.translate_text(text=pprof, target_lang='RU')}".upper()
                             print("виви")
                             if (gorone == gortwo): #если професия подходит
                                 print("пять")
@@ -1195,11 +1195,11 @@ def everything(message):
 
                         else: 
                             BlackList.append(index)
-                            print(type(str(trans.translate_text(text=message.text, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=message.text, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=message.text, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=message.text, target_lang='RU')).upper())
                             print("=")
-                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()))
-                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper())
+                            print(type(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper()))
+                            print(str(trans.translate_text(text=ws[f"D{index}"].value, target_lang='RU')).upper())
                     else: 
                         BlackList.append(index)
                         print("актив")
