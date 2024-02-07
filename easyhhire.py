@@ -1130,7 +1130,7 @@ def everything(message):
         ccity = ""
         print("раз")
         for i in range(int(wslog["F1"].value)):
-            print(f'{f"{wslog[f'A{i + 1}'].value}"} == {f"@{message.from_user.username}"}')
+            #print(f'{f"{wslog[f'A{i + 1}'].value}"} == {f"@{message.from_user.username}"}')
             if (f"{wslog[f'A{i + 1}'].value}" == f"@{message.from_user.username}"):
                 print ("тест")
                 print(str(wslog[f"G{i + 1}"].value))
