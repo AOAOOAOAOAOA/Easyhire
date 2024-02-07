@@ -658,7 +658,7 @@ def find_random_anket(message, prof, cityy):
                     if(str(ws[f"H{index}"].value) == "True"): #если активированно
                         if(str(trans.translate_text(text=message.text, target_lang="RU")).upper() == str(trans.translate_text(text=ws[f"D{index}"].value, target_lang="RU")).upper()): #если город подходит
                             gorone = f"{trans.translate_text(text=ws[f'C{index}'].value, target_lang='RU')}".upper()
-                            gortwo = f"{trans.translate_text(text=prof, target_lang="RU")}".upper()
+                            gortwo = f"{trans.translate_text(text=prof, target_lang='RU')}".upper()
                             if (gorone == gortwo): #если професия подходит
                                 CurrentUser_list.append(CurrentUser(message.from_user.username, ws[f"A{index}"])) #добавляем для кнопки "искать дальше"
                                 #добовляем в групу фото и видео, и отпровляем
