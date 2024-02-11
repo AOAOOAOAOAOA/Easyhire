@@ -24,9 +24,16 @@ fnvak = "Vaks.xlsx"
 wbvak = load_workbook(fnvak)
 wsvak = wbvak["data"]
 
+fnpay = "Payed.xlsx"
+wbpay =load_workbook(fnpay)
+wspay = wbpay["data"]
+
 fn = "Anket.xlsx"
 wb =load_workbook(fn)
 ws = wb["data"]
+
+
+
 
 lvl = 0
 
@@ -219,8 +226,8 @@ def DoChange(message):
 def Language(user):
     markup = types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True, row_width=2)
     Eng = types.KeyboardButton("🇬🇧 English")
-    Ru = types.KeyboardButton("🇷🇺 руcкий")
-    Ua = types.KeyboardButton("🇺🇦 Український")
+    Ru = types.KeyboardButton("🇷🇺 Руcский")
+    Ua = types.KeyboardButton("🇺🇦 Українська")
     De = types.KeyboardButton("🇩🇪 Deutsch")
     El = types.KeyboardButton("🇬🇷 Ελληνική")
     Fr = types.KeyboardButton("🇫🇷 Français")
@@ -366,17 +373,23 @@ City_list = []
 def ListOfCity():
     text = ""
     ARListOfCity = []
-    for ank in anket_list:
+
+    for CIcity in range(int(ws["J1"].value)):
         IsWas = False
-        for i in range(len(ARListOfCity)):
-            if (ARListOfCity[i].city.upper() == ank.city.upper()):
-                IsWas = True
-                ARListOfCity[i].count += 1
-        if (IsWas == False):
-            ARListOfCity.append(ListOnCityOne(city=ank.city, count= 1))
-    for city in ARListOfCity:
-        text += f"\n{city.city} - {city.count} анкет с этого города"
+        i = 1
+        for _curentCity in ARListOfCity:
+            i += 1
+            if(ws[f"H{i}"] == "True"):
+                if(str(trans.translate_text(text=_curentCity.city, target_lang='RU')).upper()  == str(trans.translate_text(text=str(CIcity), target_lang='RU')).upper()):
+                        _curentCity.count += 1
+                else: ARListOfCity.append(ListOnCityOne(city = str(CIcity).title(), count=1))
+        
+        for cityy in ARListOfCity:
+            text += f"\n{cityy.city} - {cityy.count} анкет с этого города"
     return text
+                    
+            
+
 
 def IsHisAnket(user):
     for anket in anket_list:
@@ -487,11 +500,13 @@ def Change_Language(message):
                 lang = ""
                 if (message.from_user.username != Admin):
                     if (message.text == "🇬🇧 English"): lang = "EN-GB"
-                    if (message.text == "🇷🇺 руcкий"): lang = 'RU'
-                    if (message.text == "🇺🇦 Український"): lang = "UK"
+                    if (message.text == "🇷🇺 Руcский"): lang = 'RU'
                     if (message.text == "🇩🇪 Deutsch"): lang = "DE"
+                    if (message.text == "🇺🇦 Українська"): lang = "UK"
                     if (message.text == "🇬🇷 Ελληνική"): lang = "EL"
                     if (message.text == "🇫🇷 Français"): lang = "FR"
+                else:
+                    print("ебать ты лох, изменил название но не это")
                 print(lang)
                 wslog["D" + str(indexx)] = lang 
                 wblog.save(fnlog)
@@ -503,6 +518,15 @@ def send_mes(message ,text, mark=0): bot.send_message(chat_id=message.chat.id, t
 
 def send_mes(message, text, mark): bot.send_message(chat_id=message.chat.id, text=trans.translate_text(text=text, target_lang= Find_Language(message=message)), reply_markup=mark)
 
+
+#def IsPayedAnket(nickname):
+#    i = 0;
+#    while true:
+#        if (ws[f"A{i+=1}"].value == None): return False;
+#        if(ws[f"A{i+=1}"].value == nickname): 
+#            
+#            return true;
+        
 
 
 
@@ -620,6 +644,7 @@ def process_video(message, thing):
 
 @bot.message_handler(commands=["get_random_anket"])
 def get_random_anket(message):
+    #if(IsPayedAnket)
     if (message.text.upper() == "СТОП"):
             send_mes(message, text=f"Мы вернули вас в меню", mark=classic(message))
     #bot.send_message(chat_id=message.chat.id, text="Укажите должность сотрудника, которого вы ищите исходя из следующего списка:\n" + ListOfProf())
@@ -678,6 +703,7 @@ def find_random_anket(message, prof, cityy):
                                         print(f"{pers + 1}")
                                         wslog[f"G{pers + 1}"] = message.text
                                         wslog[f"H{pers + 1}"] = gorone
+                                        wslog[f"I{pers + 1}"] = ws[f"A{index}"].value
                                         print("fdgfdgs")
                                         wblog.save(fnlog)
                                 
@@ -755,7 +781,7 @@ def find_random_anket(message, prof, cityy):
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.send_message(chat_id=message.chat.id, reply_markup=Language(message.from_user.username), text=f"🇬🇧 English?\n🇷🇺 руcкий?\n🇺🇦 Український?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
+    bot.send_message(chat_id=message.chat.id, reply_markup=Language(message.from_user.username), text=f"🇬🇧 English?\n🇷🇺Руcский?\n🇺🇦 Українська?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
     print("")
     bot.register_next_step_handler(message, starte)
 
@@ -766,17 +792,20 @@ def starte (message):
     global countentered
     countentered += 1
     print(countentered)
-    wslog["A" + str(countentered)] = curent_enter.user
-    wslog["B" + str(countentered)] = curent_enter.chatid
-    wslog["C" + str(countentered)] = datetime.now()
+    wslog[f"A{countentered}"] = curent_enter.user
+    wslog[f"B{countentered}"] = curent_enter.chatid
+    wslog[f"C{countentered}"] = str(datetime.now())
+    print("2")
     lang = ""
     if (message.from_user.username != Admin):
         if (message.text == "🇬🇧 English"): lang = "EN-GB"
-        if (message.text == "🇷🇺 руcкий"): lang = 'RU'
+        if (message.text == "🇷🇺 Руcский"): lang = 'RU'
         if (message.text == "🇩🇪 Deutsch"): lang = "DE"
-        if (message.text == "🇺🇦 Український"): lang = "UK"
+        if (message.text == "🇺🇦 Українська"): lang = "UK"
         if (message.text == "🇬🇷 Ελληνική"): lang = "EL"
         if (message.text == "🇫🇷 Français"): lang = "FR"
+    else:
+        print("ебать ты лох, изменил название но не это")
     print (lang)
     print(message.text)
     wslog["D" + str(countentered)] = lang
@@ -1037,15 +1066,21 @@ def everything(message):
     if (text == str(trans.translate_text(text="[🛑]Удалить вакансию", target_lang=Find_Language(message)))):
         remake_vac(message)
     if (text == str(trans.translate_text(text="[🔍]Перейти на его телеграм акаунт соискателя[🔎]", target_lang=Find_Language(message)))):
-        curr = CurrentUserFound(message.from_user.username)
-        print (f"найден юзеру {CurrentUserFound(message.from_user.username).user} этот {curr.issearching}")
-        #bot.send_message(chat_id=message.chat.id, reply_markup = eat(), text=f"Телеграм: @{curr.issearching}" )
-        send_mes(message, mark=eat(message), text=f"Телеграм: @{curr.issearching}")
-        print (f"удален юзеру {CurrentUserFound(message.from_user.username).user} этот {curr.issearching}")
-        CurrentUser_list.pop(CurrentUserDelete(message.from_user.username))
-        print (f"теперь точно")
+        #curr = CurrentUserFound(message.from_user.username)
+        #print (f"найден юзеру {CurrentUserFound(message.from_user.username).user} этот {curr.issearching}")
+        ##bot.send_message(chat_id=message.chat.id, reply_markup = eat(), text=f"Телеграм: @{curr.issearching}" )
+        #send_mes(message, mark=eat(message), text=f"Tg: @{curr.issearching}")
+        #print (f"удален юзеру {CurrentUserFound(message.from_user.username).user} этот {curr.issearching}")
+        #CurrentUser_list.pop(CurrentUserDelete(message.from_user.username))
+        #print (f"теперь точно")
+        NickName = ""
+        for i in range(wslog["F1"].value):
+            if (f"{wslog[f'A{i + 1}'].value}" == f"@{message.from_user.username}"):
+                NickName = str(wslog[f"I{i + 1}"].value)
+        bot.send_message(chat_id=message.chat.id, reply_markup = eat(message), text=f"Tg: @{NickName}" )
+
+
     if (text == str(trans.translate_text(text="[🏠]Вернуться в меню", target_lang=Find_Language(message)))):
-        #bot.send_message(chat_id=message.chat.id, reply_markup = classic(message.from_user.username), text=f"Меню")
         send_mes(message, text=f"Меню", mark=classic(message))
     if (text == str(trans.translate_text(text="[🌐]Сменить язык", target_lang=Find_Language(message)))):
         bot.send_message(chat_id=message.chat.id, reply_markup=Language(message), text=f"🇬🇧 English?\n🇷🇺 руcкий?\n🇺🇦 Український?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
@@ -1171,7 +1206,7 @@ def everything(message):
                             print("виви")
                             if (gorone == gortwo): #если професия подходит
                                 print("пять")
-                                CurrentUser_list.append(CurrentUser(message.from_user.username, ws[f"A{index}"])) #добавляем для кнопки "искать дальше"
+                                CurrentUser_list.append(CurrentUser(message.from_user.username, ws[f"A{index}"].value)) #добавляем для кнопки "искать дальше"
                                 #добовляем в групу фото и видео, и отпровляем
                                 media_group = []
                                 with open(ws[f"F{index}"].value, "rb") as f:
@@ -1185,7 +1220,7 @@ def everything(message):
 
                                 for pers in range(int(wslog["F1"])):
                                     if (f"@{message.from_user.username}" == str(wslog[f"A{pers + 1}"])):
-                                        indind = pers
+                                        wslog[f"I{pers + 1}"] = ws["A{index}"].value
                                 
 
                                 
