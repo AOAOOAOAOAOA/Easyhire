@@ -7,7 +7,7 @@ import telebot
 from telebot import types   
 import deepl as dep
 import time
-
+#bot = telebot.TeleBot("5941943610:AAEj1fNSTB576L9oMeGt1aPp_kE9SP0Ojio")
 bot = telebot.TeleBot("6230489836:AAHnBg41o6RZbyLG2JjWeYfOfXRS5SWO0c8")
 trans = dep.Translator("725d6dad-e54a-39d2-f167-16a0eec32055:fx")
 
@@ -347,19 +347,42 @@ class ListOnProfOne:
 
 
 def ListOfProf():
+#    text = ""
+#    ARListOfProf = []
+#    for ank in anket_list:
+#        IsWas = False
+#        for i in range(len(ARListOfProf)):
+#            if (ARListOfProf[i].prof.upper() == ank.profession.upper()):
+#                IsWas = True
+#                ARListOfProf[i].count += 1
+#        if (IsWas == False):
+#            ARListOfProf.append(ListOnProfOne(prof=ank.profession, count= 1))
+#    for prof in ARListOfProf:
+#        text += f"\n{prof.prof} - {prof.count} анкет с этой професией"
+#    return text
     text = ""
     ARListOfProf = []
-    for ank in anket_list:
-        IsWas = False
-        for i in range(len(ARListOfProf)):
-            if (ARListOfProf[i].prof.upper() == ank.profession.upper()):
-                IsWas = True
-                ARListOfProf[i].count += 1
-        if (IsWas == False):
-            ARListOfProf.append(ListOnProfOne(prof=ank.profession, count= 1))
-    for prof in ARListOfProf:
-        text += f"\n{prof.prof} - {prof.count} анкет с этой професией"
+    print("1")
+    ARListOfProf.append(ListOnProfOne(prof=str(ws["C2"].value), count=0 ))
+    for PRprof in range(int(ws["J1"].value)):
+        print("2")
+        i = 1
+        for _curentProf in ARListOfProf:
+            print("3")
+            i += 1
+            print(type(ws[f"H{i}"].value))
+            if(ws[f"H{i}"].value == True):
+                print("4")
+                if(str(trans.translate_text(text=_curentProf.prof, target_lang='RU')).upper()  == str(trans.translate_text(text=str(ws[f"C{PRprof + 2}"].value), target_lang='RU')).upper()):
+                    _curentProf.count += 1
+                    print("5")
+                else: ARListOfProf.append(ListOnProfOne(city = str(ws[f"С{PRprof + 2}"].value).title(), count=1))
+    for proff in ARListOfProf:
+        text += f"\n{proff.prof} - {proff.count} анкет с этого города"
+        print(f"\n{proff.prof} - {proff.count} анкет с этого города")
+    print("6")
     return text
+
 
 class ListOnCityOne:
     def __init__(self,
@@ -373,19 +396,26 @@ City_list = []
 def ListOfCity():
     text = ""
     ARListOfCity = []
-
+    print("1")
+    ARListOfCity.append(ListOnCityOne(city=str(ws["D2"].value), count=0 ))
     for CIcity in range(int(ws["J1"].value)):
+        print("2")
         IsWas = False
         i = 1
         for _curentCity in ARListOfCity:
+            print("3")
             i += 1
-            if(ws[f"H{i}"] == "True"):
-                if(str(trans.translate_text(text=_curentCity.city, target_lang='RU')).upper()  == str(trans.translate_text(text=str(CIcity), target_lang='RU')).upper()):
-                        _curentCity.count += 1
-                else: ARListOfCity.append(ListOnCityOne(city = str(CIcity).title(), count=1))
-        
-        for cityy in ARListOfCity:
-            text += f"\n{cityy.city} - {cityy.count} анкет с этого города"
+            print(type(ws[f"H{i}"].value))
+            if(ws[f"H{i}"].value == True):
+                print("4")
+                if(str(trans.translate_text(text=_curentCity.city, target_lang='RU')).upper()  == str(trans.translate_text(text=str(ws[f"D{CIcity + 2}"].value), target_lang='RU')).upper()):
+                    _curentCity.count += 1
+                    print("5")
+                else: ARListOfCity.append(ListOnCityOne(city = str(ws[f"D{CIcity + 2}"].value).title(), count=1))
+    for cityy in ARListOfCity:
+        text += f"\n{cityy.city} - {cityy.count} анкет с этого города"
+        print(f"\n{cityy.city} - {cityy.count} анкет с этого города")
+    print("6")
     return text
                     
             
@@ -1218,7 +1248,7 @@ def everything(message):
                                 send_mes(message, text=f'Имя: {ws[f"B{index}"].value}\n\nПрофесии: {ws[f"C{index}"].value} \nГород: {ws[f"D{index}"].value} \n\nОписание: \n{ws[f"E{index}"].value}', mark= eat(message))
                                 indind = 0
 
-                                for pers in range(int(wslog["F1"])):
+                                for pers in range(int(wslog["F1"].value)):
                                     if (f"@{message.from_user.username}" == str(wslog[f"A{pers + 1}"])):
                                         wslog[f"I{pers + 1}"] = ws["A{index}"].value
                                 
