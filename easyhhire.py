@@ -7,8 +7,8 @@ import telebot
 from telebot import types   
 import deepl as dep
 import time
-#bot = telebot.TeleBot("5941943610:AAEj1fNSTB576L9oMeGt1aPp_kE9SP0Ojio")
-bot = telebot.TeleBot("6230489836:AAHnBg41o6RZbyLG2JjWeYfOfXRS5SWO0c8")
+bot = telebot.TeleBot("5941943610:AAEj1fNSTB576L9oMeGt1aPp_kE9SP0Ojio")
+#bot = telebot.TeleBot("6230489836:AAHnBg41o6RZbyLG2JjWeYfOfXRS5SWO0c8")
 trans = dep.Translator("725d6dad-e54a-39d2-f167-16a0eec32055:fx")
 
 
@@ -360,6 +360,8 @@ def ListOfProf():
 #    for prof in ARListOfProf:
 #        text += f"\n{prof.prof} - {prof.count} анкет с этой професией"
 #    return text
+
+
     text = ""
     ARListOfProf = []
     print("1")
@@ -376,12 +378,13 @@ def ListOfProf():
                 if(str(trans.translate_text(text=_curentProf.prof, target_lang='RU')).upper()  == str(trans.translate_text(text=str(ws[f"C{PRprof + 2}"].value), target_lang='RU')).upper()):
                     _curentProf.count += 1
                     print("5")
-                else: ARListOfProf.append(ListOnProfOne(city = str(ws[f"С{PRprof + 2}"].value).title(), count=1))
+                else: ARListOfProf.append(ListOnProfOne(prof = str(ws[f"C{PRprof + 2}"].value).title(), count=1))
     for proff in ARListOfProf:
         text += f"\n{proff.prof} - {proff.count} анкет с этого города"
         print(f"\n{proff.prof} - {proff.count} анкет с этого города")
     print("6")
     return text
+
 
 
 class ListOnCityOne:
@@ -509,24 +512,22 @@ def DataReadVak():
         indexx += 1
         
 def Find_Language(message):
-    
-    if (message.from_user.username == Admin):
-        return 'RU'
-    else:
-        indexx = wslog["F1"].value
-        for i in range(indexx):
-            if (f"@{message.from_user.username}" == wslog["A" + str(indexx)].value):
-                return wslog["D" + str(indexx)].value
+    ind = 1
+    for i in range(wslog["F1"].value):
+        print(f"{i} {wslog["A" + str(ind)].value} {wslog["D" + str(ind)].value}")
+        if (f"@{message.from_user.username}" == wslog["A" + str(ind)].value):
+            return wslog["D" + str(ind)].value
+        ind += 1
             
             
 def Change_Language(message):
-    
+    ii = 1
     if (message.from_user.username == Admin):
         return 'RU'
     else:
         indexx = wslog["F1"].value
         for i in range(indexx):
-            if (f"@{message.from_user.username}" == wslog["A" + str(indexx)].value):
+            if (f"@{message.from_user.username}" == wslog["A" + str(ii)].value):
                 lang = ""
                 if (message.from_user.username != Admin):
                     if (message.text == "🇬🇧 English"): lang = "EN-GB"
@@ -538,12 +539,16 @@ def Change_Language(message):
                 else:
                     print("ебать ты лох, изменил название но не это")
                 print(lang)
-                wslog["D" + str(indexx)] = lang 
+                wslog["D" + str(ii)] = lang 
                 wblog.save(fnlog)
-                print (wslog["D" + str(indexx)].value)
+                print (wslog["D" + str(ii)].value)
+                
+            ii += 1
         
        
-def send_mes(message ,text, mark=0): bot.send_message(chat_id=message.chat.id, text=trans.translate_text(text=text, target_lang= Find_Language(message=message)))
+def send_mes(message ,text, mark=0): 
+    print(Find_Language(message=message))
+    bot.send_message(chat_id=message.chat.id, text=trans.translate_text(text=text, target_lang= Find_Language(message=message)))
 
 
 def send_mes(message, text, mark): bot.send_message(chat_id=message.chat.id, text=trans.translate_text(text=text, target_lang= Find_Language(message=message)), reply_markup=mark)
@@ -576,30 +581,30 @@ def create_anket(message):
 
 
 def process_city(message):
-    try:
-        if (message.text.upper() == "СТОП"):
-            send_mes(message, text=f"Мы вернули вас в меню", mark=classic(message))
-        global city 
-        city = message.text
-        City_list.append(city)
-        #bot.send_message(chat_id=message.chat.id, text=f"Пожайлуста, укажите работу на которую вы претендуете.\nЕсли вашей профессии тут нет, вы можете ее указать и она автоматически будет добавлена в список:\n" + ListOfProf())
-        send_mes(message, text=f"Пожайлуста, укажите работу на которую вы претендуете.\nЕсли вашей профессии тут нет, вы можете ее указать и она автоматически будет добавлена в список:\n" + ListOfProf(), mark=None)
-        bot.register_next_step_handler(message, process_profesion)
-    except:
-        bot.send_message(chat_id=message.chat.id, text="Неверно, попробуйте еще раз или чуть позже", reply_markup=classic(message))
+#try:
+    if (message.text.upper() == "СТОП"):
+        send_mes(message, text=f"Мы вернули вас в меню", mark=classic(message))
+    global city 
+    city = message.text
+    City_list.append(city)
+    #bot.send_message(chat_id=message.chat.id, text=f"Пожайлуста, укажите работу на которую вы претендуете.\nЕсли вашей профессии тут нет, вы можете ее указать и она автоматически будет добавлена в список:\n" + ListOfProf())
+    send_mes(message, text=f"Пожайлуста, укажите работу на которую вы претендуете.\nЕсли вашей профессии тут нет, вы можете ее указать и она автоматически будет добавлена в список:\n" + ListOfProf(), mark=None)
+    bot.register_next_step_handler(message, process_profesion)
+#except:
+#    bot.send_message(chat_id=message.chat.id, text="Неверно, попробуйте еще раз или чуть позже", reply_markup=classic(message))
 
 def process_profesion(message):
-    try:
-        if (message.text.upper() == "СТОП"):
-            send_mes(message, text=f"Мы вернули вас в меню", mark=classic(message))
-        global profession
-        profession = message.text
-        Profession_list.append(profession)
-        #bot.send_message(chat_id=message.chat.id, text="Укажите ваше имя и фамилию")
-        send_mes(message, text= "Укажите ваше имя и фамилию", mark=0)
-        bot.register_next_step_handler(message, process_name)
-    except:
-        send_mes(message, mark=classic(message), text="Неверно, попробуйте еще раз или чуть позже")
+#try:
+    if (message.text.upper() == "СТОП"):
+        send_mes(message, text=f"Мы вернули вас в меню", mark=classic(message))
+    global profession
+    profession = message.text
+    Profession_list.append(profession)
+    #bot.send_message(chat_id=message.chat.id, text="Укажите ваше имя и фамилию")
+    send_mes(message, text= "Укажите ваше имя и фамилию", mark=0)
+    bot.register_next_step_handler(message, process_name)
+#except:
+#    send_mes(message, mark=classic(message), text="Неверно, попробуйте еще раз или чуть позже")
 
 def process_name(message):
     try:
@@ -811,41 +816,53 @@ def find_random_anket(message, prof, cityy):
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.send_message(chat_id=message.chat.id, reply_markup=Language(message.from_user.username), text=f"🇬🇧 English?\n🇷🇺Руcский?\n🇺🇦 Українська?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
-    print("")
-    bot.register_next_step_handler(message, starte)
+    if (message.from_user.username != None):
+        bot.send_message(chat_id=message.chat.id, reply_markup=Language(message.from_user.username), text=f"🇬🇧 English?\n🇷🇺Руcский?\n🇺🇦 Українська?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
+        print("")
+        bot.register_next_step_handler(message, starte)
+    else : 
+        bot.send_message(chat_id=message.chat.id, text=f"You don't have a username, you need to create one in order to continue \nУ вас нет имени пользователя, для продолжения вам нужно его создать" )
+
 
 def starte (message):
-    print("переход работает")
-    curent_enter = Entered_in("@" + message.from_user.username, message.chat.id)
-    entered.append(curent_enter)
-    global countentered
-    countentered += 1
-    print(countentered)
-    wslog[f"A{countentered}"] = curent_enter.user
-    wslog[f"B{countentered}"] = curent_enter.chatid
-    wslog[f"C{countentered}"] = str(datetime.now())
-    print("2")
+
+    was = True
     lang = ""
-    if (message.from_user.username != Admin):
-        if (message.text == "🇬🇧 English"): lang = "EN-GB"
-        if (message.text == "🇷🇺 Руcский"): lang = 'RU'
-        if (message.text == "🇩🇪 Deutsch"): lang = "DE"
-        if (message.text == "🇺🇦 Українська"): lang = "UK"
-        if (message.text == "🇬🇷 Ελληνική"): lang = "EL"
-        if (message.text == "🇫🇷 Français"): lang = "FR"
-    else:
-        print("ебать ты лох, изменил название но не это")
-    print (lang)
-    print(message.text)
-    wslog["D" + str(countentered)] = lang
-    wslog["F1"] = countentered
-    wblog.save(fnlog)
-    print("усе загрузил")
-    print(wslog["A" + str(countentered)].value)
-    print(Find_Language(message))
-    send_mes(message, text=f"Здраствуйте, это бесплатная бета-версия бота \"EasyHire\". \nДолжен отметить, что в конечной версии бот будет выглядеть более совершенным и в то же время станет платным. Все анкеты и вакансии будут сохранены в конечного бота.\nИнструкция:\n[👁]Найти работника - этой опцией вы можете воспользоваться, если вы ищите сотрудника\n[🔧]Создать анкету - вы можете использовать данный пункт для поиска работы\n[🔨]Создать вакансию - в этом разделе работадатели, имеют возможность, сообщить об открытии вакансии и требовании к соискателю \n[🫧]Найти вакансию - вы можете воспользоваться этим пунктом, чтобы найти необходимую вам работу", mark= classic(message))
-    print("все сказал")
+    if (message.text == "🇬🇧 English"): lang = "EN-GB"
+    elif (message.text == "🇷🇺 Руcский"): lang = 'RU'
+    elif (message.text == "🇩🇪 Deutsch"): lang = "DE"
+    elif (message.text == "🇺🇦 Українська"): lang = "UK"
+    elif (message.text == "🇬🇷 Ελληνική"): lang = "EL"
+    elif (message.text == "🇫🇷 Français"): lang = "FR"
+    else : 
+        was = False
+        bot.send_message(chat_id=message.chat.id, reply_markup=Language(message.from_user.username), text=f"🇬🇧 English?\n🇷🇺Руcский?\n🇺🇦 Українська?\n🇩🇪 Deutsch?\n🇬🇷 Ελληνική?\n🇫🇷 Français?" )
+        bot.register_next_step_handler(message, start)
+
+
+
+    if(was):
+        print("переход работает")
+        curent_enter = Entered_in("@" + message.from_user.username, message.chat.id)
+        entered.append(curent_enter)
+        global countentered
+        countentered += 1
+        print(countentered)
+        wslog[f"A{countentered}"] = curent_enter.user
+        wslog[f"B{countentered}"] = curent_enter.chatid
+        wslog[f"C{countentered}"] = str(datetime.now())
+        print("2")
+
+        print (lang)
+        print(message.text)
+        wslog["D" + str(countentered)] = lang
+        wslog["F1"] = countentered
+        wblog.save(fnlog)
+        print("усе загрузил")
+        print(wslog["A" + str(countentered)].value)
+        print(Find_Language(message))
+        send_mes(message, text=f"Здраствуйте, это бесплатная бета-версия бота \"EasyHire\". \nДолжен отметить, что в конечной версии бот будет выглядеть более совершенным и в то же время станет платным. Все анкеты и вакансии будут сохранены в конечного бота.\nИнструкция:\n[👁]Найти работника - этой опцией вы можете воспользоваться, если вы ищите сотрудника\n[🔧]Создать анкету - вы можете использовать данный пункт для поиска работы\n[🔨]Создать вакансию - в этом разделе работадатели, имеют возможность, сообщить об открытии вакансии и требовании к соискателю \n[🫧]Найти вакансию - вы можете воспользоваться этим пунктом, чтобы найти необходимую вам работу", mark= classic(message))
+        print("все сказал")
     
 
 @bot.message_handler(commands=["create_vacantions"])
