@@ -7,8 +7,8 @@ import telebot
 from telebot import types   
 import deepl as dep
 import time
-bot = telebot.TeleBot("5941943610:AAEj1fNSTB576L9oMeGt1aPp_kE9SP0Ojio")
-#bot = telebot.TeleBot("6230489836:AAHnBg41o6RZbyLG2JjWeYfOfXRS5SWO0c8")
+#bot = telebot.TeleBot("5941943610:AAEj1fNSTB576L9oMeGt1aPp_kE9SP0Ojio")
+bot = telebot.TeleBot("6230489836:AAHnBg41o6RZbyLG2JjWeYfOfXRS5SWO0c8")
 trans = dep.Translator("725d6dad-e54a-39d2-f167-16a0eec32055:fx")
 
 
@@ -514,7 +514,7 @@ def DataReadVak():
 def Find_Language(message):
     ind = 1
     for i in range(wslog["F1"].value):
-        print(f"{i} {wslog["A" + str(ind)].value} {wslog["D" + str(ind)].value}")
+        #   print(f"{i} {wslog["A" + str(ind)].value} {wslog["D" + str(ind)].value}")
         if (f"@{message.from_user.username}" == wslog["A" + str(ind)].value):
             return wslog["D" + str(ind)].value
         ind += 1
